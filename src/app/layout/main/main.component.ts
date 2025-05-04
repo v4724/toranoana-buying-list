@@ -4,24 +4,25 @@ import { Book } from '../../shared/book-list-table/model/book.interface';
 import { BookStatus } from '../../shared/book-list-table/model/book-status.enum';
 import { BookSize } from '../../shared/book-list-table/model/book-size.enum';
 import { MatInputModule } from '@angular/material/input';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BookEstWeightPipe } from '../../shared/pipe/book-est-weight.pipe';
-import { DecimalPipe } from '@angular/common';
+import { CdkDropListGroup } from '@angular/cdk/drag-drop';
+import { cloneDeep } from 'lodash-es';
 
 @Component({
   selector: 'app-main',
   standalone: true,
   imports: [
+    CdkDropListGroup,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     BookListTableComponent,
   ],
-  providers: [DecimalPipe],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
@@ -30,12 +31,11 @@ export class MainComponent {
   // https://html-parser-backend-qtq8.onrender.com
 
   bookList: Book[] = [];
+  bookList2: Book[] = [];
 
   url = new FormControl('https://ecs.toranoana.jp/joshi/ec/item/040031226821/');
 
   private http: HttpClient = inject(HttpClient);
-
-  private decimalPipe: DecimalPipe = inject(DecimalPipe);
 
   constructor() {
     let books = 20;
@@ -57,6 +57,7 @@ export class MainComponent {
         totalIntlShipFee: 0,
       });
     }
+    this.bookList2 = cloneDeep(this.bookList);
   }
 
   addToList() {

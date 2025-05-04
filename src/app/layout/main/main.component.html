@@ -16,12 +16,12 @@
     <button (click)="addToList()">+</button>
   </div>
 
-  <div class="grow min-h-0 flex w-full overflow-auto">
+  <div class="grow min-h-0 flex w-full overflow-auto" cdkDropListGroup>
     <div class="h-full">
       <app-book-list-table [bookList]="bookList"></app-book-list-table>
     </div>
     <div>
-      <app-book-list-table [bookList]="bookList"></app-book-list-table>
+      <app-book-list-table [bookList]="bookList2"></app-book-list-table>
     </div>
     <div>
       <app-book-list-table [bookList]="bookList"></app-book-list-table>

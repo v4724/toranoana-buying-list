@@ -2,11 +2,13 @@ import {
   AfterViewInit,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   OnChanges,
   OnInit,
+  output,
   Signal,
-  SimpleChange,
   SimpleChanges,
   TemplateRef,
   viewChild,
@@ -15,11 +17,20 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { TableColumnDef } from './interface/table-column.interface';
 import { CommonModule } from '@angular/common';
+import {
+  CdkDragDrop,
+  CdkDropList,
+  DragDropModule,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
+import { DroppedService } from './service/dropped.service';
+import { filter, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatSortModule],
+  imports: [CommonModule, MatTableModule, MatSortModule, DragDropModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
@@ -56,8 +67,22 @@ export class TableComponent<T> implements OnInit, OnChanges, AfterViewInit {
 
   dataSource = new MatTableDataSource<T>([]);
 
+  private cdkDropList = viewChild(CdkDropList);
+
+  private droppedService = inject(DroppedService);
+
   ngOnInit(): void {
     this.dataSource.data = this.data();
+
+    this.droppedService.dropped
+      .pipe(
+        filter((container) => {
+          return this.cdkDropList() === container;
+        }),
+      )
+      .subscribe(() => {
+        this.dataSource._updateChangeSubscription?.(); // 通知 table 資料有異動
+      });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -75,5 +100,32 @@ export class TableComponent<T> implements OnInit, OnChanges, AfterViewInit {
     if (sortState.direction) {
     } else {
     }
+  }
+
+  drop(event: CdkDragDrop<any[]>) {
+    const prevData = event.previousContainer.data;
+    const currData = event.container.data;
+
+    if (!prevData || !currData) {
+      console.warn('Drop failed: data undefined', event);
+      return;
+    }
+
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+      this.droppedService.dropped.next(event.previousContainer);
+    }
+    this.dataSource._updateChangeSubscription?.(); // 通知 table 資料有異動
   }
 }
