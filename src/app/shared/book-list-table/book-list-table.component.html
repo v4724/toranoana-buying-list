@@ -1,0 +1,69 @@
+<div class="h-full p-4">
+  <app-table
+    [columns]="columns"
+    [data]="bookList()"
+    [headerTemplates]="{}"
+    [columnTemplates]="{
+      previewImg,
+      price,
+      bookTitle,
+      status,
+      stock,
+      estWeight,
+      intlShipFee,
+    }"
+  >
+    <ng-template #previewImg let-element>
+      <img [src]="element.previewImg" class="aspect-2/3" />
+    </ng-template>
+
+    <ng-template #price let-element>
+      @if (
+        element.price !== '' &&
+        element.price !== null &&
+        element.price !== undefined
+      ) {
+        <span> ￥{{ element.price | number: '1.0-0' }} </span>
+      } @else {
+        -
+      }
+    </ng-template>
+
+    <ng-template #bookTitle let-element>
+      <a [href]="element.url" target="_blank">{{ element.bookTitle }}</a>
+    </ng-template>
+
+    <ng-template #status let-element>
+      <span>
+        {{ element.status | bookStatus }}
+      </span>
+    </ng-template>
+    <ng-template #stock let-element>
+      <span [class]="element.status | bookStockColor">
+        {{ element.status | bookStock }}
+      </span>
+    </ng-template>
+    <ng-template #estWeight let-element>
+      @if (
+        element.estWeight !== '' &&
+        element.estWeight !== null &&
+        element.estWeight !== undefined
+      ) {
+        <span> {{ element.estWeight | number }}g </span>
+      } @else {
+        -
+      }
+    </ng-template>
+    <ng-template #intlShipFee let-element>
+      @if (
+        element.estWeight !== '' &&
+        element.estWeight !== null &&
+        element.estWeight !== undefined
+      ) {
+        <span> NTD {{ element.estWeight * 0.18 | number: '1.0-0' }} </span>
+      } @else {
+        -
+      }
+    </ng-template>
+  </app-table>
+</div>
