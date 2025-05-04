@@ -1,0 +1,183 @@
+{
+  "root": true,
+  "ignorePatterns": ["projects/**/*"],
+  "extends": [
+    "plugin:prettier/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
+  "plugins": ["import"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.html"],
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "no-console": [
+          "error",
+          {
+            "allow": [
+              "debug",
+              "warn",
+              "error"
+            ]
+          }
+        ],
+        "import/order": [
+          "error",
+          {
+            "pathGroups": [
+              {
+                "pattern": "@fbg-core/**",
+                "group": "internal",
+                "position": "after"
+              },
+              {
+                "pattern": "@fbg-env/**",
+                "group": "internal",
+                "position": "after"
+              },
+              {
+                "pattern": "@fbg-shared/**",
+                "group": "internal",
+                "position": "after"
+              },
+              {
+                "pattern": "@fbg/**",
+                "group": "internal",
+                "position": "after"
+              }
+            ],
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "index",
+              "object",
+              "type",
+              [
+                "parent",
+                "sibling"
+              ]
+            ],
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            },
+            "pathGroupsExcludedImportTypes": [
+              "builtin"
+            ],
+            "newlines-between": "always",
+            "distinctGroup": false
+          }
+        ],
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "CallExpression[callee.property.name='random'][callee.object.name='Math']",
+            "message": "Math.random is not allowed, use crypto.getRandomValues() or cryptoRandom() instead."
+          },
+          {
+            "selector": "CallExpression[callee.property.name='open'][callee.object.name='window']",
+            "message": "window.open is not allowed, use AppService.openLink(url) instead."
+          }
+        ],
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@ionic/angular", "@ionic/angular/standalone"],
+                "importNames": ["IonHeader"],
+                "message": "Use ionic extend module from shared modules instead."
+              },
+              {
+                "group": ["@ionic/angular", "@ionic/angular/standalone"],
+                "importNames": ["AlertController"],
+                "message": "Use 'AlertService' from shared modules instead."
+              },
+              {
+                "group": ["@ionic/angular", "@ionic/angular/standalone"],
+                "importNames": ["ToastController"],
+                "message": "Use 'ToastService' from shared modules instead."
+              },
+              {
+                "group": ["@ionic/angular", "@ionic/angular/standalone"],
+                "importNames": ["LoadingController"],
+                "message": "Use 'LoadingService' from shared modules instead."
+              },
+              {
+                "group": ["@capacitor/browser"],
+                "importNames": ["Browser"],
+                "message": "Use `AppService.openLink(url)` from core service instead."
+              }
+            ]
+          }
+        ],
+        "@angular-eslint/component-class-suffix": [
+          "error",
+          {
+            "suffixes": ["Page", "Component"]
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "fbg",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "fbg",
+            "style": "camelCase"
+          }
+        ],
+        "tailwindcss/no-custom-classname": "off",
+        "prettier/prettier": ["error", { "endOfLine": "auto" }]
+      }
+    },
+    {
+      "files": ["**/ion-extends/*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "ion",
+            "style": "kebab-case"
+          }
+        ],
+        "no-restricted-imports": "off"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "rules": {
+        "tailwindcss/no-custom-classname": ["warn", {
+          "whitelist": [
+            "(fbg|swiper)\\-?.*"
+          ]
+        }
+        ]
+      }
+    }
+  ]
+}
