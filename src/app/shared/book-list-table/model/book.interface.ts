@@ -1,5 +1,6 @@
 import { BookSize } from './book-size.enum';
 import { BookStatus } from './book-status.enum';
+import { BookStock } from './book-stock.enum';
 
 export interface Book {
   /** Id */
@@ -19,6 +20,9 @@ export interface Book {
 
   /** 狀態 */
   status: BookStatus;
+
+  /** 庫存 */
+  stock: BookStock;
 
   /** 尺寸 */
   bookSize: BookSize;

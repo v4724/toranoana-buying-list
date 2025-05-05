@@ -17,14 +17,11 @@
   </div>
 
   <div class="grow min-h-0 flex w-full overflow-auto" cdkDropListGroup>
-    <div class="h-full">
+    <div class="h-full w-1/3">
       <app-book-list-table [bookList]="bookList"></app-book-list-table>
     </div>
-    <div>
+    <div class="h-full w-1/3">
       <app-book-list-table [bookList]="bookList2"></app-book-list-table>
-    </div>
-    <div>
-      <app-book-list-table [bookList]="bookList"></app-book-list-table>
     </div>
   </div>
 </div>

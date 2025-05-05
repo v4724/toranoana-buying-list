@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { BookEstWeightPipe } from '../../shared/pipe/book-est-weight.pipe';
 import { CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { cloneDeep } from 'lodash-es';
+import { BookStock } from '../../shared/book-list-table/model/book-stock.enum';
 
 @Component({
   selector: 'app-main',
@@ -46,7 +47,8 @@ export class MainComponent {
         url: '',
         bookTitle: `title-${books}`,
         price: 0,
-        status: (books % 5).toString() as BookStatus,
+        status: (books % 3).toString() as BookStatus,
+        stock: (books % 3).toString() as BookStock,
         bookSize: books % 2 === 0 ? BookSize.A5 : BookSize.B5,
         bookPages: 0,
         estWeight: 0,
@@ -104,6 +106,7 @@ export class MainComponent {
       bookTitle: info.bookTitle,
       price: Number.parseInt(info.price),
       status: info.status as BookStatus,
+      stock: info.stock as BookStock,
       bookSize: bookSize,
       bookPages: bookPages,
       estWeight: estWeight,

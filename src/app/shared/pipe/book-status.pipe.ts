@@ -10,11 +10,9 @@ export class BookStatusPipe implements PipeTransform {
     let text = '';
     switch (value) {
       case BookStatus.IN_STOCK:
-      case BookStatus.LIMITED_IN_STOCK:
         text = '現貨';
         break;
       case BookStatus.PRE_ORDER:
-      case BookStatus.LIMITED_PRE_ORDER:
         text = '預約';
         break;
       case BookStatus.OUT_OF_STOCK:

@@ -1,80 +1,84 @@
 <div class="h-full min-h-0 relative">
   <!-- 滾動層 -->
-  <div class="max-h-full overflow-auto">
-    <div
-      class="table-wrapper"
-      cdkDropList
-      [cdkDropListData]="dataSource.data"
-      (cdkDropListDropped)="drop($event)"
+  <div
+    class="max-h-full overflow-auto table-wrapper"
+    cdkDropList
+    [cdkDropListData]="dataSource.data"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      (matSortChange)="announceSortChange($event)"
+      class="mat-elevation-z8 w-full"
     >
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        matSort
-        (matSortChange)="announceSortChange($event)"
-        class="mat-elevation-z8 w-full"
-      >
-        @for (col of columnDefs(); track $index) {
-          <ng-container [matColumnDef]="col.name">
-            <th
-              mat-header-cell
-              *matHeaderCellDef="let element"
-              mat-sort-header
-              [disabled]="!col.sort"
-              [style.min-width.px]="col.width ? col.width : 70"
-            >
-              @if (col.headerType === 'template' && col.headerTemplateRef) {
-                <ng-container
-                  *ngTemplateOutlet="
-                    col.headerTemplateRef;
-                    context: { $implicit: element }
-                  "
-                >
-                </ng-container>
-              } @else {
-                {{ col.title }}
-              }
-            </th>
+      @for (col of columnDefs(); track $index) {
+        <ng-container [matColumnDef]="col.name">
+          <th
+            mat-header-cell
+            *matHeaderCellDef="let element"
+            mat-sort-header
+            [disabled]="!col.sort"
+            [style.min-width.px]="col.width ? col.width : 70"
+            class="sticky top-0 z-10"
+            [ngClass]="{ 'left-0': col.sticky, 'z-20': col.sticky }"
+          >
+            @if (col.headerType === 'template' && col.headerTemplateRef) {
+              <ng-container
+                *ngTemplateOutlet="
+                  col.headerTemplateRef;
+                  context: { $implicit: element }
+                "
+              >
+              </ng-container>
+            } @else {
+              {{ col.title }}
+            }
+          </th>
 
-            <td mat-cell *matCellDef="let element">
-              @if (col.columnType === 'template' && col.columnTemplateRef) {
-                <ng-container
-                  *ngTemplateOutlet="
-                    col.columnTemplateRef;
-                    context: { $implicit: element }
-                  "
-                >
-                </ng-container>
-              } @else if (col.columnType === 'number') {
-                <ng-container
-                  *ngTemplateOutlet="
-                    cellContent;
-                    context: { $implicit: element[col.name] | number }
-                  "
-                >
-                </ng-container>
-              } @else {
-                <ng-container
-                  *ngTemplateOutlet="
-                    cellContent;
-                    context: { $implicit: element[col.name] }
-                  "
-                >
-                </ng-container>
-              }
-            </td>
-          </ng-container>
-        }
+          <td
+            mat-cell
+            *matCellDef="let element"
+            [ngClass]="{ 'sticky left-0': col.sticky }"
+          >
+            @if (col.columnType === 'template' && col.columnTemplateRef) {
+              <ng-container
+                *ngTemplateOutlet="
+                  col.columnTemplateRef;
+                  context: { $implicit: element }
+                "
+              >
+              </ng-container>
+            } @else if (col.columnType === 'number') {
+              <ng-container
+                *ngTemplateOutlet="
+                  cellContent;
+                  context: { $implicit: element[col.name] | number }
+                "
+              >
+              </ng-container>
+            } @else {
+              <ng-container
+                *ngTemplateOutlet="
+                  cellContent;
+                  context: { $implicit: element[col.name] }
+                "
+              >
+              </ng-container>
+            }
+          </td>
+        </ng-container>
+      }
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: displayedColumns()"
-          cdkDrag
-          class="draggble-box"
-        ></tr>
-      </table>
-    </div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns()"
+        cdkDrag
+        class="draggble-box"
+      ></tr>
+    </table>
   </div>
 </div>
 

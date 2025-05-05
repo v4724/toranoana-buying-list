@@ -6,6 +6,7 @@ export interface TableColumnDef {
   width?: number;
   hidden?: boolean;
   sort?: boolean;
+  sticky?: boolean;
   headerType?: '' | 'template';
   columnType?: '' | 'template' | 'number';
   headerTemplateRef?: TemplateRef<unknown>;

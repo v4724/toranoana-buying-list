@@ -24,7 +24,13 @@ export class BookListTableComponent {
   bookList = input<Book[]>([]);
 
   columns: TableColumnDef[] = [
-    { name: 'previewImg', title: '', columnType: 'template', width: 120 },
+    {
+      name: 'previewImg',
+      title: '',
+      columnType: 'template',
+      width: 120,
+      sticky: true,
+    },
     { name: 'bookTitle', title: '書名', columnType: 'template', width: 120 },
     {
       name: 'price',
