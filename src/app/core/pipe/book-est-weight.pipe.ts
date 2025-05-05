@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BookSize } from '../book-list-table/model/book-size.enum';
+import { BookSize } from '../../shared/book-list-table/model/book-size.enum';
 
 @Pipe({
   name: 'bookEstWeight',

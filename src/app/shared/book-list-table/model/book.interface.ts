@@ -33,7 +33,7 @@ export interface Book {
   /** 重量(g) */
   estWeight: number;
 
-  /** 國際運費(NTD) */
+  /** 國際運費(NT$) */
   intlShipFee?: number;
 
   /** 數量 */
@@ -45,6 +45,6 @@ export interface Book {
   /** 總重量 */
   totalEstWeight: number;
 
-  /** 總國際運費(NTD) */
+  /** 總國際運費(NT$) */
   totalIntlShipFee: number;
 }

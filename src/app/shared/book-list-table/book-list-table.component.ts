@@ -1,11 +1,12 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { TableComponent } from '../table/table.component';
 import { TableColumnDef } from '../table/interface/table-column.interface';
 import { Book } from './model/book.interface';
-import { BookStatusPipe } from '../pipe/book-status.pipe';
-import { BookStockColorPipe } from '../pipe/book-stock-color.pipe';
+import { BookStatusPipe } from '../../core/pipe/book-status.pipe';
+import { BookStockColorPipe } from '../../core/pipe/book-stock-color.pipe';
 import { CommonModule } from '@angular/common';
-import { BookStockPipe } from '../pipe/book-stock.pipe';
+import { BookStockPipe } from '../../core/pipe/book-stock.pipe';
+import { CalBoardService } from '../../features/cal-board/service/cal-board.service';
 
 @Component({
   selector: 'app-book-list-table',
@@ -31,7 +32,7 @@ export class BookListTableComponent {
       width: 120,
       sticky: true,
     },
-    { name: 'bookTitle', title: '書名', columnType: 'template', width: 120 },
+    { name: 'bookTitle', title: '書名', columnType: 'template', width: 150 },
     {
       name: 'price',
       title: '價格(JPY)',
@@ -59,29 +60,37 @@ export class BookListTableComponent {
       name: 'estWeight',
       title: '*重量(g)',
       columnType: 'template',
-      sort: true,
       width: 100,
     },
     {
       name: 'intlShipFee',
-      title: '*國際運費(NTD)',
+      title: '*國際運費(NT$)',
       columnType: 'template',
-      sort: true,
       width: 120,
     },
-    { name: 'count', title: '數量', hidden: false },
-    { name: 'totalPrice', title: '總價格(日圓)', hidden: false, width: 80 },
+    { name: 'count', title: '數量', columnType: 'template', hidden: false },
     {
-      name: 'totalEstWeight',
-      title: '*總重量\r\n(g)',
+      name: 'totalPrice',
+      title: '總價格(日圓)',
+      columnType: 'template',
       hidden: false,
       width: 80,
     },
     {
+      name: 'totalEstWeight',
+      title: '*總重量\r\n(g)',
+      columnType: 'template',
+      hidden: false,
+      width: 100,
+    },
+    {
       name: 'totalIntlShipFee',
-      title: '*總國際運費(NTD)',
+      title: '*總國際運費(NT$)',
+      columnType: 'template',
       hidden: false,
       width: 120,
     },
   ];
+
+  calBoardService = inject(CalBoardService);
 }

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BookStatus } from '../book-list-table/model/book-status.enum';
-import { BookStock } from '../book-list-table/model/book-stock.enum';
+import { BookStatus } from '../../shared/book-list-table/model/book-status.enum';
+import { BookStock } from '../../shared/book-list-table/model/book-stock.enum';
 
 @Pipe({
   name: 'bookStock',

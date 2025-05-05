@@ -4,6 +4,7 @@ export interface TableColumnDef {
   name: string;
   title: string;
   width?: number;
+  align?: '' | 'start' | 'end';
   hidden?: boolean;
   sort?: boolean;
   sticky?: boolean;

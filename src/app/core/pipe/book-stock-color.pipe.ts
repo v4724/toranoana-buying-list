@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BookStock } from '../book-list-table/model/book-stock.enum';
+import { BookStock } from '../../shared/book-list-table/model/book-stock.enum';
 
 @Pipe({
   name: 'bookStockColor',

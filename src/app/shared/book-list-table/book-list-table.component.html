@@ -1,4 +1,4 @@
-<div class="h-full p-4">
+<div class="h-full">
   <app-table
     [columns]="columns"
     [data]="bookList()"
@@ -11,6 +11,10 @@
       stock,
       estWeight,
       intlShipFee,
+      count,
+      totalPrice,
+      totalEstWeight,
+      totalIntlShipFee,
     }"
   >
     <ng-template #previewImg let-element>
@@ -23,7 +27,7 @@
         element.price !== null &&
         element.price !== undefined
       ) {
-        <span> ￥{{ element.price | number: '1.0-0' }} </span>
+        <span> ¥{{ element.price | number: '1.0-0' }} </span>
       } @else {
         -
       }
@@ -43,6 +47,7 @@
         {{ element.stock | bookStock }}
       </span>
     </ng-template>
+
     <ng-template #estWeight let-element>
       @if (
         element.estWeight !== '' &&
@@ -54,13 +59,66 @@
         -
       }
     </ng-template>
+
     <ng-template #intlShipFee let-element>
       @if (
         element.estWeight !== '' &&
         element.estWeight !== null &&
         element.estWeight !== undefined
       ) {
-        <span> NTD {{ element.estWeight * 0.18 | number: '1.0-0' }} </span>
+        <span>
+          NT$
+          {{
+            element.estWeight * calBoardService.intlFreightPerG()
+              | number: '1.0-0'
+          }}
+        </span>
+      } @else {
+        -
+      }
+    </ng-template>
+
+    <!-- TODO 數量增減 -->
+    <ng-template #count let-element>
+      <span>
+        {{ element.count }}
+      </span>
+    </ng-template>
+
+    <ng-template #totalPrice let-element>
+      @if (
+        element.totalPrice !== '' &&
+        element.totalPrice !== null &&
+        element.totalPrice !== undefined
+      ) {
+        <span> ¥{{ element.totalPrice | number: '1.0-0' }} </span>
+      } @else {
+        -
+      }
+    </ng-template>
+
+    <ng-template #totalEstWeight let-element>
+      @if (
+        element.totalEstWeight !== '' &&
+        element.totalEstWeight !== null &&
+        element.totalEstWeight !== undefined
+      ) {
+        <span> {{ element.totalEstWeight | number }}g </span>
+      } @else {
+        -
+      }
+    </ng-template>
+
+    <ng-template #totalIntlShipFee let-element>
+      @if (
+        element.totalIntlShipFee !== '' &&
+        element.totalIntlShipFee !== null &&
+        element.totalIntlShipFee !== undefined
+      ) {
+        <span>
+          NT$
+          {{ element.totalIntlShipFee | number: '1.0-0' }}
+        </span>
       } @else {
         -
       }

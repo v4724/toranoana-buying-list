@@ -1,0 +1,122 @@
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, EMPTY, map, Observable } from 'rxjs';
+import { Book } from '../../../shared/book-list-table/model/book.interface';
+import { BookStatus } from '../../../shared/book-list-table/model/book-status.enum';
+import { BookStock } from '../../../shared/book-list-table/model/book-stock.enum';
+import { BookSize } from '../../../shared/book-list-table/model/book-size.enum';
+import { cloneDeep } from 'lodash-es';
+import { HttpClient } from '@angular/common/http';
+import { BookEstWeightPipe } from '../../../core/pipe/book-est-weight.pipe';
+import { CalBoardService } from '../../../features/cal-board/service/cal-board.service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class BooksService {
+  fetchUrlAPI = 'http://localhost:3000';
+  // https://html-parser-backend-qtq8.onrender.com
+
+  buyingList = new BehaviorSubject<Book[]>([]);
+
+  wishList = new BehaviorSubject<Book[]>([]);
+
+  calBoardService = inject(CalBoardService);
+
+  constructor(private http: HttpClient) {
+    let bookList = [];
+    let books = 20;
+    while (books-- > 0) {
+      bookList.push({
+        id: '',
+        previewImg: '',
+        url: '',
+        bookTitle: `title-${books}`,
+        price: 0,
+        status: (books % 3).toString() as BookStatus,
+        stock: (books % 3).toString() as BookStock,
+        bookSize: books % 2 === 0 ? BookSize.A5 : BookSize.B5,
+        bookPages: 0,
+        estWeight: 0,
+        intlShipFee: 0,
+        count: 1,
+        totalPrice: 0,
+        totalEstWeight: 0,
+        totalIntlShipFee: 0,
+      });
+    }
+    const bookList2 = cloneDeep(bookList);
+
+    this.buyingList.next(bookList);
+    this.wishList.next(bookList2);
+  }
+
+  addToBuyingList(book: Book) {
+    console.debug('fetch:', book);
+    const wishList = this.wishList.value;
+    const buyingList = this.buyingList.value;
+
+    const findInBuyingList = buyingList.find((item) => item.id === book.id);
+    const findInWishList = wishList.find((item) => item.id === book.id);
+    if (findInBuyingList || findInWishList) {
+      const text = findInBuyingList ? '購買清單' : '願望清單';
+      window.alert(`重複加入「${text}」，若需要多本請調整該本數量。`);
+      return;
+    }
+
+    buyingList.push(book);
+
+    const newList = [...buyingList];
+    this.buyingList.next(newList);
+  }
+
+  /** 取得本子資訊 */
+  fetchProductInfo$(url: string): Observable<Book> {
+    const fetchUrl = `${this.fetchUrlAPI}/scrape?url=${url}`;
+    return this.http.get(fetchUrl, { responseType: 'text' }).pipe(
+      map((html: string) => this.parseHtml(html)),
+      catchError((err) => {
+        console.error('取得本子資訊失敗', err);
+        window.alert(`取得本子資訊失敗 ${err.stauts}: ${err.statusText}`);
+        return EMPTY;
+      }),
+    );
+  }
+
+  private parseHtml(html: string): Book {
+    const info = JSON.parse(html);
+    let bookSize = info.bookSize as BookSize;
+    if (bookSize.toString() === 'Ｂ５') {
+      bookSize = BookSize.B5;
+    } else if (bookSize.toString() === 'Ａ５') {
+      bookSize = BookSize.A5;
+    }
+
+    const url: string = info.url;
+    const bookPages: number = Number.parseInt(info.bookPages);
+    const endWithSlash = url.endsWith('/');
+    const urlArr = info.url.split('/');
+    const id = endWithSlash
+      ? urlArr[urlArr.length - 2]
+      : urlArr[urlArr.length - 1];
+
+    const bookEstW = new BookEstWeightPipe();
+    const estWeight = bookEstW.transform(bookPages, bookSize);
+
+    return {
+      id: id,
+      previewImg: info.previewImg,
+      url: url,
+      bookTitle: info.bookTitle,
+      price: Number.parseInt(info.price),
+      status: info.status as BookStatus,
+      stock: info.stock as BookStock,
+      bookSize: bookSize,
+      bookPages: bookPages,
+      estWeight: estWeight,
+      count: 1,
+      totalPrice: Number.parseInt(info.price),
+      totalEstWeight: estWeight,
+      totalIntlShipFee: estWeight * this.calBoardService.intlFreightPerG(),
+    } as Book;
+  }
+}

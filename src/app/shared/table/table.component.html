@@ -22,7 +22,13 @@
             [disabled]="!col.sort"
             [style.min-width.px]="col.width ? col.width : 70"
             class="sticky top-0 z-10"
-            [ngClass]="{ 'left-0': col.sticky, 'z-20': col.sticky }"
+            [ngClass]="{
+              'left-0': col.sticky,
+              'z-20': col.sticky,
+              'text-center': !col.align,
+              'text-start': col.align === 'start',
+              'text-end': col.align === 'end',
+            }"
           >
             @if (col.headerType === 'template' && col.headerTemplateRef) {
               <ng-container
@@ -41,6 +47,7 @@
             mat-cell
             *matCellDef="let element"
             [ngClass]="{ 'sticky left-0': col.sticky }"
+            [style.text-align]="col.align ? col.align : 'center'"
           >
             @if (col.columnType === 'template' && col.columnTemplateRef) {
               <ng-container
@@ -76,6 +83,7 @@
         mat-row
         *matRowDef="let row; columns: displayedColumns()"
         cdkDrag
+        [cdkDragData]="row"
         class="draggble-box"
       ></tr>
     </table>
