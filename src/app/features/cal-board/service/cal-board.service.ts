@@ -22,6 +22,11 @@ export class CalBoardService {
     { initialValue: 0.22 },
   );
 
+  toranoanaFreightValueChanges = toSignal(
+    this.formGroup.get('toranoanaFreight')!.valueChanges,
+    { initialValue: 295 },
+  );
+
   intlFreightValueChanges = toSignal(
     this.formGroup.get('intlFreight')!.valueChanges,
     { initialValue: 180 },

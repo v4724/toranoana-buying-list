@@ -1,5 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, EMPTY, map, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  EMPTY,
+  map,
+  Observable,
+  Subject,
+} from 'rxjs';
 import { Book } from '../../../shared/book-list-table/model/book.interface';
 import { BookStatus } from '../../../shared/book-list-table/model/book-status.enum';
 import { BookStock } from '../../../shared/book-list-table/model/book-stock.enum';
@@ -8,6 +15,7 @@ import { cloneDeep } from 'lodash-es';
 import { HttpClient } from '@angular/common/http';
 import { BookEstWeightPipe } from '../../../core/pipe/book-est-weight.pipe';
 import { CalBoardService } from '../../../features/cal-board/service/cal-board.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +29,14 @@ export class BooksService {
   wishList = new BehaviorSubject<Book[]>([]);
 
   calBoardService = inject(CalBoardService);
+
+  buyingBookCntChange = new Subject<{
+    book: Book;
+    cnt: number;
+    action: string;
+  }>();
+
+  buyingBookCntChange$ = toSignal(this.buyingBookCntChange);
 
   constructor(private http: HttpClient) {
     let bookList = [];
@@ -42,6 +58,20 @@ export class BooksService {
         totalPrice: 0,
         totalEstWeight: 0,
         totalIntlShipFee: 0,
+        shippingSchedule: [
+          {
+            type: '毎度便',
+            shippingDate: '2025/05/07',
+          },
+          {
+            type: '定期便（週1)',
+            shippingDate: '2025/05/07',
+          },
+          {
+            type: '定期便（月2)',
+            shippingDate: '2025/05/20',
+          },
+        ],
       });
     }
     const bookList2 = cloneDeep(bookList);
@@ -110,10 +140,12 @@ export class BooksService {
       price: Number.parseInt(info.price),
       status: info.status as BookStatus,
       stock: info.stock as BookStock,
+      shippingSchedule: info.shippingSchedule,
       bookSize: bookSize,
       bookPages: bookPages,
       estWeight: estWeight,
       count: 1,
+      intlShipFee: estWeight * this.calBoardService.intlFreightPerG(),
       totalPrice: Number.parseInt(info.price),
       totalEstWeight: estWeight,
       totalIntlShipFee: estWeight * this.calBoardService.intlFreightPerG(),

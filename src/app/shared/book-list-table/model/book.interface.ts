@@ -24,6 +24,9 @@ export interface Book {
   /** 庫存 */
   stock: BookStock;
 
+  /** 庫存 */
+  shippingSchedule: { type: string; shippingDate: string }[];
+
   /** 尺寸 */
   bookSize: BookSize;
 
@@ -46,5 +49,5 @@ export interface Book {
   totalEstWeight: number;
 
   /** 總國際運費(NT$) */
-  totalIntlShipFee: number;
+  totalIntlShipFee?: number;
 }

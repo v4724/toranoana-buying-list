@@ -39,6 +39,7 @@ export class CalBoardComponent implements OnInit {
   /** 本數 */
   cnt = computed(() => {
     const list = this.buyingList();
+    const buyingBookCntChange$ = this.booksService.buyingBookCntChange$();
     return list
       ? this.decimalPipe.transform(
           list.reduce((sum, book) => {
@@ -52,10 +53,13 @@ export class CalBoardComponent implements OnInit {
   /** 總價(JPY) */
   totalPriceJPY = computed(() => {
     const list = this.buyingList();
+    const buyingBookCntChange$ = this.booksService.buyingBookCntChange$();
+    const toranoanaFreight =
+      this.calBoardService.toranoanaFreightValueChanges() ?? 0;
     return list
       ? list.reduce((sum, book) => {
           return sum + book.totalPrice;
-        }, 0)
+        }, toranoanaFreight)
       : '-';
   });
 
@@ -71,6 +75,7 @@ export class CalBoardComponent implements OnInit {
   /** 總重(g) */
   totalW = computed(() => {
     const list = this.buyingList();
+    const buyingBookCntChange$ = this.booksService.buyingBookCntChange$();
     return list
       ? this.decimalPipe.transform(
           list.reduce((sum, book) => sum + book.totalEstWeight, 0),

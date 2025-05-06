@@ -9,6 +9,7 @@
       bookTitle,
       status,
       stock,
+      shippingSchedule,
       estWeight,
       intlShipFee,
       count,
@@ -42,10 +43,26 @@
         {{ element.status | bookStatus }}
       </span>
     </ng-template>
+
     <ng-template #stock let-element>
       <span [class]="element.stock | bookStockColor">
         {{ element.stock | bookStock }}
       </span>
+    </ng-template>
+
+    <ng-template #shippingSchedule let-element>
+      @if (element.shippingSchedule.length) {
+        <div class="flex-col gap-1">
+          @for (item of element.shippingSchedule; track $index) {
+            <div class="flex text-xs items-center text-start">
+              {{ item.type }}：
+              {{ item.shippingDate }}
+            </div>
+          }
+        </div>
+      } @else {
+        -
+      }
     </ng-template>
 
     <ng-template #estWeight let-element>
@@ -78,11 +95,23 @@
       }
     </ng-template>
 
-    <!-- TODO 數量增減 -->
     <ng-template #count let-element>
-      <span>
-        {{ element.count }}
-      </span>
+      <div class="flex border-solid border-gray-400 border rounded-sm">
+        <button
+          class="size-5"
+          [disabled]="element.count === 1"
+          (click)="decreaseBookCnt(element)"
+        >
+          -
+        </button>
+        <input
+          class="w-8 text-center focus-visible:outline-none"
+          #bookCount
+          [value]="element.count"
+          (change)="updateBookCnt(element, bookCount)"
+        />
+        <button class="size-5" (click)="increaseBookCnt(element)">+</button>
+      </div>
     </ng-template>
 
     <ng-template #totalPrice let-element>
