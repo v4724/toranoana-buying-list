@@ -1,39 +1,42 @@
 <div class="flex gap-5">
-  <div class="flex items-center">
-    <form class="flex gap-3" [formGroup]="formGroup">
-      <mat-form-field class="w-36">
-        <mat-label>日幣匯率</mat-label>
-        <input
-          class=""
-          matInput
-          formControlName="exchangeRate"
-          placeholder="0.xxx"
-          value=""
-        />
-      </mat-form-field>
-      <mat-form-field class="w-36">
-        <mat-label>虎之穴運費(JPY)</mat-label>
-        <input
-          class=""
-          matInput
-          formControlName="toranoanaFreight"
-          placeholder="ex: 295"
-          value="295"
-        />
-        <span matSuffix class="text-sm">¥&nbsp;</span>
-      </mat-form-field>
-      <mat-form-field class="w-36">
-        <mat-label>國際運費</mat-label>
-        <input
-          class=""
-          matInput
-          formControlName="intlFreight"
-          placeholder="ex: 180"
-          value=""
-        />
-        <span matSuffix class="text-sm"> NT$/kg&nbsp;</span>
-      </mat-form-field>
-    </form>
+  <div class="flex-col">
+    <div class="flex items-center">
+      <form class="flex gap-3" [formGroup]="formGroup">
+        <mat-form-field class="w-36">
+          <mat-label>日幣匯率</mat-label>
+          <input
+            class=""
+            matInput
+            formControlName="exchangeRate"
+            placeholder="0.xxx"
+            value=""
+          />
+        </mat-form-field>
+        <mat-form-field class="w-36">
+          <mat-label>虎之穴運費(JPY)</mat-label>
+          <input
+            class=""
+            matInput
+            formControlName="toranoanaFreight"
+            placeholder="ex: 295"
+            value="295"
+          />
+          <span matSuffix class="text-sm">¥&nbsp;</span>
+        </mat-form-field>
+        <mat-form-field class="w-36">
+          <mat-label>國際運費</mat-label>
+          <input
+            class=""
+            matInput
+            formControlName="intlFreight"
+            placeholder="ex: 180"
+            value=""
+          />
+          <span matSuffix class="text-sm"> NT$/kg&nbsp;</span>
+        </mat-form-field>
+      </form>
+    </div>
+    <app-update-all-books-info></app-update-all-books-info>
   </div>
 
   <div class="min-w-60">

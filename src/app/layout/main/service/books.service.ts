@@ -100,14 +100,16 @@ export class BooksService {
   }
 
   /** 取得本子資訊 */
-  fetchProductInfo$(url: string): Observable<Book> {
+  fetchProductInfo$(url: string, alert: boolean = true): Observable<Book> {
     const fetchUrl = `${this.fetchUrlAPI}/scrape?url=${url}`;
     return this.http.get(fetchUrl, { responseType: 'text' }).pipe(
       map((html: string) => this.parseHtml(html)),
       catchError((err) => {
         console.error('取得本子資訊失敗', err);
-        window.alert(`取得本子資訊失敗 ${err.stauts}: ${err.statusText}`);
-        return EMPTY;
+        if (alert) {
+          window.alert(`取得本子資訊失敗 ${err.stauts}: ${err.statusText}`);
+        }
+        throw err;
       }),
     );
   }

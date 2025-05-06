@@ -1,0 +1,47 @@
+<button mat-button (click)="update()" [disabled]="isLoading()">
+  <mat-icon>update</mat-icon>更新本子狀態
+</button>
+<button
+  mat-button
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  (click)="isOpen = !isOpen"
+>
+  <mat-icon>{{ !isOpen ? 'list' : 'close' }}</mat-icon>
+  {{ !isOpen ? '檢視更新紀錄' : '關閉更新紀錄' }}
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen"
+  (detach)="isOpen = false"
+>
+  @if (result.length) {
+    <div class="flex-col gap-1 result-list">
+      @if (isLoading()) {
+        <div class="animate-pulse">最新更新時間： ...</div>
+      } @else {
+        <div
+          class="opacity-0 transition-opacity duration-500 ease-in"
+          [class.opacity-100]="lastUpdateTime"
+        >
+          最新更新時間：{{ lastUpdateTime }}
+        </div>
+      }
+
+      @for (item of result; track $index) {
+        <div class="flex">
+          <div>書名：{{ item.book.bookTitle }}</div>
+          @if (item.errStatus) {
+            <div>- 更新失敗 ({{ item.errStatus }} {{ item.errText }})</div>
+          } @else {
+            <div>- 更新成功</div>
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="flex result-list">尚未更新</div>
+  }
+</ng-template>

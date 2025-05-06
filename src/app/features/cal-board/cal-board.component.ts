@@ -1,16 +1,12 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BooksService } from '../../layout/main/service/books.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { CalBoardService } from './service/cal-board.service';
+import { UpdateAllBooksInfoComponent } from '../update-all-books-info/update-all-books-info.component';
 
 @Component({
   selector: 'app-cal-board',
@@ -21,6 +17,7 @@ import { CalBoardService } from './service/cal-board.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    UpdateAllBooksInfoComponent,
   ],
   templateUrl: './cal-board.component.html',
   styleUrl: './cal-board.component.scss',

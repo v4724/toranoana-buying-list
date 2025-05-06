@@ -4,17 +4,13 @@ import { Book } from '../../shared/book-list-table/model/book.interface';
 import { MatInputModule } from '@angular/material/input';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {
-  CdkDrag,
-  CdkDragMove,
-  CdkDropListGroup,
-  DragDropModule,
-} from '@angular/cdk/drag-drop';
+import { CdkDragMove, DragDropModule } from '@angular/cdk/drag-drop';
 import { CalBoardComponent } from '../../features/cal-board/cal-board.component';
 import { BooksService } from './service/books.service';
 import { MatButtonModule } from '@angular/material/button';
-import { finalize, tap } from 'rxjs';
+import { catchError, EMPTY, finalize, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
+import { UpdateAllBooksInfoComponent } from '../../features/update-all-books-info/update-all-books-info.component';
 
 @Component({
   selector: 'app-main',
@@ -30,6 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatIconModule,
     BookListTableComponent,
+    UpdateAllBooksInfoComponent,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
@@ -67,6 +64,9 @@ export class MainComponent implements OnInit {
         .pipe(
           tap((book) => {
             this.booksService.addToBuyingList(book);
+          }),
+          catchError(() => {
+            return EMPTY;
           }),
           finalize(() => {
             this.fetchLoading.set(false);
