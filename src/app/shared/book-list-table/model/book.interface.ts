@@ -50,4 +50,7 @@ export interface Book {
 
   /** 總國際運費(NT$) */
   totalIntlShipFee?: number;
+
+  /** 是否更新中 */
+  isLoading?: boolean;
 }

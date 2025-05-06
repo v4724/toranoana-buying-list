@@ -16,10 +16,15 @@
       totalPrice,
       totalEstWeight,
       totalIntlShipFee,
+      action,
     }"
   >
     <ng-template #previewImg let-element>
-      <img [src]="element.previewImg" class="aspect-2/3" />
+      <div class="flex items-center gap-2 py-1">
+        <mat-icon class="cursor-move !size-4 text-gray-400">reorder</mat-icon>
+        <app-update-book-info [book]="element"></app-update-book-info>
+        <img [src]="element.previewImg" class="aspect-2/3 w-20" />
+      </div>
     </ng-template>
 
     <ng-template #price let-element>
@@ -151,6 +156,14 @@
       } @else {
         -
       }
+    </ng-template>
+
+    <ng-template #action let-element>
+      <div class="flex items-center gap-2 py-1">
+        <button (click)="removeBook(element)">
+          <mat-icon class="text-xl text-red-400"> delete </mat-icon>
+        </button>
+      </div>
     </ng-template>
   </app-table>
 </div>

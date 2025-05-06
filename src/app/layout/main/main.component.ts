@@ -10,7 +10,6 @@ import { BooksService } from './service/books.service';
 import { MatButtonModule } from '@angular/material/button';
 import { catchError, EMPTY, finalize, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
-import { UpdateAllBooksInfoComponent } from '../../features/update-all-books-info/update-all-books-info.component';
 
 @Component({
   selector: 'app-main',
@@ -26,7 +25,6 @@ import { UpdateAllBooksInfoComponent } from '../../features/update-all-books-inf
     MatInputModule,
     MatIconModule,
     BookListTableComponent,
-    UpdateAllBooksInfoComponent,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',

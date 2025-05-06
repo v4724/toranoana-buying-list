@@ -3,6 +3,7 @@ import {
   BehaviorSubject,
   catchError,
   EMPTY,
+  finalize,
   map,
   Observable,
   Subject,
@@ -97,6 +98,26 @@ export class BooksService {
 
     const newList = [...buyingList];
     this.buyingList.next(newList);
+  }
+
+  removeBook(book: Book) {
+    const findInBuyingList = this.buyingList.value.findIndex(
+      (item) => item.id === book.id,
+    );
+    if (findInBuyingList !== -1) {
+      const list = [...this.buyingList.value];
+      list.splice(findInBuyingList, 1);
+      this.buyingList.next(list);
+    }
+
+    const findInWishList = this.wishList.value.findIndex(
+      (item) => item.id === book.id,
+    );
+    if (findInWishList !== -1) {
+      const list = [...this.wishList.value];
+      list.splice(findInWishList, 1);
+      this.wishList.next(list);
+    }
   }
 
   /** 取得本子資訊 */

@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { BookStockPipe } from '../../core/pipe/book-stock.pipe';
 import { CalBoardService } from '../../features/cal-board/service/cal-board.service';
 import { BooksService } from '../../layout/main/service/books.service';
+import { MatIconModule } from '@angular/material/icon';
+import { UpdateBookInfoComponent } from '../../features/update-book-info/update-book-info.component';
 
 @Component({
   selector: 'app-book-list-table',
@@ -18,6 +20,8 @@ import { BooksService } from '../../layout/main/service/books.service';
     BookStatusPipe,
     BookStockPipe,
     BookStockColorPipe,
+    MatIconModule,
+    UpdateBookInfoComponent,
   ],
   templateUrl: './book-list-table.component.html',
   styleUrl: './book-list-table.component.scss',
@@ -30,7 +34,7 @@ export class BookListTableComponent {
       name: 'previewImg',
       title: '',
       columnType: 'template',
-      width: 120,
+      width: 150,
       sticky: true,
     },
     { name: 'bookTitle', title: '書名', columnType: 'template', width: 150 },
@@ -97,6 +101,12 @@ export class BookListTableComponent {
       hidden: false,
       width: 120,
     },
+    {
+      name: 'action',
+      title: '',
+      columnType: 'template',
+      hidden: false,
+    },
   ];
 
   booksService = inject(BooksService);
@@ -150,6 +160,9 @@ export class BookListTableComponent {
     book.totalIntlShipFee = !Number.isNaN(intlFreightPerG)
       ? book.count * book.estWeight * intlFreightPerG
       : undefined;
-    console.log(book, book.intlShipFee);
+  }
+
+  removeBook(book: Book) {
+    this.booksService.removeBook(book);
   }
 }
