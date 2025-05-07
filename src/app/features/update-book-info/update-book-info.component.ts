@@ -3,12 +3,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Book } from '../../shared/book-list-table/model/book.interface';
 import { BooksService } from '../../layout/main/service/books.service';
-import { catchError, EMPTY, finalize } from 'rxjs';
+import { catchError, EMPTY, finalize, tap } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-update-book-info',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule],
+  imports: [MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './update-book-info.component.html',
   styleUrl: './update-book-info.component.scss',
 })
@@ -23,6 +24,11 @@ export class UpdateBookInfoComponent {
     this.booksService
       .fetchProductInfo$(this.book().url, false)
       .pipe(
+        tap((book: Book) => {
+          this.book().status = book.status;
+          this.book().stock = book.stock;
+          this.book().shippingSchedule = book.shippingSchedule;
+        }),
         catchError((err) => {
           // TODO 失敗提示
           return EMPTY;

@@ -18,8 +18,8 @@
             class=""
             matInput
             formControlName="toranoanaFreight"
-            placeholder="ex: 295"
-            value="295"
+            placeholder="ex: 395"
+            value=""
           />
           <span matSuffix class="text-sm">¥&nbsp;</span>
         </mat-form-field>
@@ -54,7 +54,7 @@
     </div>
     <div class="flex justify-between">
       <div>預估總重：</div>
-      <div>{{ totalW() }} g</div>
+      <div>{{ totalW() | number: '1.0-0' }} g</div>
     </div>
     <div class="flex justify-between">
       <div>預估總運費：</div>

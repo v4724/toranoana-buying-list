@@ -1,5 +1,5 @@
 <button mat-button (click)="update()" [disabled]="isLoading()">
-  <mat-icon>update</mat-icon>更新本子狀態
+  <mat-icon>update</mat-icon>更新所有本子狀態
 </button>
 <button
   mat-button
@@ -33,7 +33,7 @@
       @for (item of result; track $index) {
         <div class="flex">
           <div>書名：{{ item.book.bookTitle }}</div>
-          @if (item.errStatus) {
+          @if (item.errStatus || item.errText) {
             <div>- 更新失敗 ({{ item.errStatus }} {{ item.errText }})</div>
           } @else {
             <div>- 更新成功</div>

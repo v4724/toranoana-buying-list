@@ -16,6 +16,14 @@ table {
   border-radius: 4px;
 }
 
+tr td:first-child {
+  @apply border-b-0;
+}
+
+tr td {
+  @apply border-gray-300;
+}
+
 .cdk-drag-preview {
   border: none;
   box-sizing: border-box;

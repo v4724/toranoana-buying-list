@@ -83,9 +83,24 @@
         mat-row
         *matRowDef="let row; columns: displayedColumns()"
         cdkDrag
-        [cdkDragData]="row"
         class="draggble-box"
-      ></tr>
+      >
+        @if (dragPreviewTemplateRef()) {
+          <ng-template cdkDragPreview>
+            <ng-container
+              *ngTemplateOutlet="
+                dragPreviewTemplateRef();
+                context: { $implicit: row }
+              "
+            >
+            </ng-container>
+          </ng-template>
+        }
+      </tr>
+
+      <tr *matNoDataRow>
+        <div class="p-4 sticky left-0">無願望清單</div>
+      </tr>
     </table>
   </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { BooksService } from '../../layout/main/service/books.service';
-import { catchError, EMPTY, finalize } from 'rxjs';
+import { catchError, EMPTY, finalize, tap } from 'rxjs';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { Book } from '../../shared/book-list-table/model/book.interface';
 import { DatePipe } from '@angular/common';
@@ -40,6 +40,11 @@ export class UpdateAllBooksInfoComponent {
       this.booksService
         .fetchProductInfo$(book.url, false)
         .pipe(
+          tap((info) => {
+            book.status = info.status;
+            book.stock = info.stock;
+            book.shippingSchedule = info.shippingSchedule;
+          }),
           catchError((err) => {
             errStatus = err.status;
             errText = err.statusText;

@@ -19,3 +19,7 @@
 .result-list > div:last-child {
   border-bottom: none;
 }
+
+:host::ng-deep {
+  --mat-sys-primary: theme('colors.gray.500') !important;
+}

@@ -40,11 +40,32 @@ export class BooksService {
   buyingBookCntChange$ = toSignal(this.buyingBookCntChange);
 
   constructor(private http: HttpClient) {
-    let bookList = [];
-    let books = 20;
+    const bookList = [
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031235400/',
+      'https://ecs.toranoana.jp/joshi/ec/item/040031234759/',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031234725/',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031234481/',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031228798/',
+      'https://ecs.toranoana.jp/joshi/ec/item/040031227966/',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031233922/',
+      'https://ecs.toranoana.jp/joshi/ec/item/040031234649/',
+      'https://ecs.toranoana.jp/joshi/ec/item/040031237699',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031226479/',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031237640',
+      'https://ecs.toranoana.jp/joshi/ec/item/040031226821/',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031154427/',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031226319',
+      'https://ec.toranoana.jp/joshi_r/ec/item/040031235423/',
+    ];
+    bookList.forEach((url) => {
+      this.fetchProductInfo$(url).subscribe((book) => {
+        this.addToBuyingList(book);
+      });
+    });
+    let books = 3;
     while (books-- > 0) {
-      bookList.push({
-        id: '',
+      this.addToBuyingList({
+        id: `id-${books}`,
         previewImg: '',
         url: '',
         bookTitle: `title-${books}`,
@@ -61,7 +82,7 @@ export class BooksService {
         totalIntlShipFee: 0,
         shippingSchedule: [
           {
-            type: '毎度便',
+            type: '每度便',
             shippingDate: '2025/05/07',
           },
           {
@@ -75,10 +96,9 @@ export class BooksService {
         ],
       });
     }
-    const bookList2 = cloneDeep(bookList);
-
-    this.buyingList.next(bookList);
-    this.wishList.next(bookList2);
+    // const bookList2 = cloneDeep(bookList);
+    // this.buyingList.next(bookList);
+    // this.wishList.next(bookList2);
   }
 
   addToBuyingList(book: Book) {
@@ -90,7 +110,9 @@ export class BooksService {
     const findInWishList = wishList.find((item) => item.id === book.id);
     if (findInBuyingList || findInWishList) {
       const text = findInBuyingList ? '購買清單' : '願望清單';
-      window.alert(`重複加入「${text}」，若需要多本請調整該本數量。`);
+      window.alert(
+        `「${book.bookTitle}」重複加入「${text}」，若需要多本請調整該本數量。`,
+      );
       return;
     }
 
@@ -154,6 +176,8 @@ export class BooksService {
 
     const bookEstW = new BookEstWeightPipe();
     const estWeight = bookEstW.transform(bookPages, bookSize);
+    const intlShipFee = estWeight * this.calBoardService.intlFreightPerG();
+    const totalIntlShipFee = estWeight * this.calBoardService.intlFreightPerG();
 
     return {
       id: id,
@@ -165,13 +189,15 @@ export class BooksService {
       stock: info.stock as BookStock,
       shippingSchedule: info.shippingSchedule,
       bookSize: bookSize,
-      bookPages: bookPages,
-      estWeight: estWeight,
+      bookPages: Number.isNaN(bookPages) ? null : bookPages,
+      estWeight: Number.isNaN(estWeight) ? null : estWeight,
       count: 1,
-      intlShipFee: estWeight * this.calBoardService.intlFreightPerG(),
+      intlShipFee: Number.isNaN(intlShipFee) ? null : intlShipFee,
       totalPrice: Number.parseInt(info.price),
-      totalEstWeight: estWeight,
-      totalIntlShipFee: estWeight * this.calBoardService.intlFreightPerG(),
+      totalEstWeight: Number.isNaN(estWeight) ? null : estWeight,
+      totalIntlShipFee: Number.isNaN(totalIntlShipFee)
+        ? null
+        : totalIntlShipFee,
     } as Book;
   }
 }

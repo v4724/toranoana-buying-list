@@ -1,3 +1,8 @@
-<button mat-icon-button (click)="updateBook()" [disabled]="book().isLoading">
+<button
+  mat-icon-button
+  matTooltip="更新"
+  (click)="updateBook()"
+  [disabled]="book().isLoading"
+>
   <mat-icon class="">update</mat-icon>
 </button>

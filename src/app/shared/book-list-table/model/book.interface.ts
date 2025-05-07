@@ -24,14 +24,14 @@ export interface Book {
   /** 庫存 */
   stock: BookStock;
 
-  /** 庫存 */
+  /** 運輸週期 */
   shippingSchedule: { type: string; shippingDate: string }[];
 
   /** 尺寸 */
   bookSize: BookSize;
 
   /** 頁數 */
-  bookPages: number;
+  bookPages: number | null;
 
   /** 重量(g) */
   estWeight: number;

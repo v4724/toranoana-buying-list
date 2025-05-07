@@ -52,7 +52,10 @@ export class CalBoardComponent implements OnInit {
     const list = this.buyingList();
     const buyingBookCntChange$ = this.booksService.buyingBookCntChange$();
     const toranoanaFreight =
-      this.calBoardService.toranoanaFreightValueChanges() ?? 0;
+      Number(this.calBoardService.toranoanaFreightValueChanges()) ?? 0;
+    const r = list?.reduce((sum, book) => {
+      return sum + book.totalPrice;
+    }, 0);
     return list
       ? list.reduce((sum, book) => {
           return sum + book.totalPrice;
@@ -74,10 +77,7 @@ export class CalBoardComponent implements OnInit {
     const list = this.buyingList();
     const buyingBookCntChange$ = this.booksService.buyingBookCntChange$();
     return list
-      ? this.decimalPipe.transform(
-          list.reduce((sum, book) => sum + book.totalEstWeight, 0),
-          '1.0-0',
-        )
+      ? list.reduce((sum, book) => sum + book.totalEstWeight, 0)
       : '-';
   });
 
@@ -85,7 +85,8 @@ export class CalBoardComponent implements OnInit {
   totalFreight = computed(() => {
     const intlFreightPerG = this.calBoardService.intlFreightPerG();
     const totalW = this.totalW();
-    const valid = !Number.isNaN(totalW) && !!intlFreightPerG;
+    const valid =
+      !Number.isNaN(totalW) && (intlFreightPerG === 0 || !!intlFreightPerG);
     return valid
       ? this.decimalPipe.transform(Number(totalW) * intlFreightPerG, '1.0-0')
       : '-';

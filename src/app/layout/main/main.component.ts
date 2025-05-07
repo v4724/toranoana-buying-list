@@ -10,6 +10,7 @@ import { BooksService } from './service/books.service';
 import { MatButtonModule } from '@angular/material/button';
 import { catchError, EMPTY, finalize, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-main',
@@ -24,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatTooltipModule,
     BookListTableComponent,
   ],
   templateUrl: './main.component.html',
@@ -57,6 +59,7 @@ export class MainComponent implements OnInit {
   addToList() {
     const url = this.url.value;
     if (url) {
+      this.fetchLoading.set(true);
       this.booksService
         .fetchProductInfo$(url)
         .pipe(
@@ -76,7 +79,6 @@ export class MainComponent implements OnInit {
 
   onDrag(event: CdkDragMove) {
     const width = event.pointerPosition.x - 24 - 4 - 2;
-    console.log(event.pointerPosition, width);
     this.wishTableWidth.set(width.toString());
   }
 }

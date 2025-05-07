@@ -2,12 +2,10 @@ import {
   AfterViewInit,
   Component,
   computed,
-  ElementRef,
   inject,
   input,
   OnChanges,
   OnInit,
-  output,
   Signal,
   SimpleChanges,
   TemplateRef,
@@ -25,7 +23,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { DroppedService } from './service/dropped.service';
-import { filter, takeUntil } from 'rxjs';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-table',
@@ -42,6 +40,8 @@ export class TableComponent<T> implements OnInit, OnChanges, AfterViewInit {
   headerTemplates = input<{ [key: string]: TemplateRef<unknown> }>({});
 
   columnTemplates = input<{ [key: string]: TemplateRef<unknown> }>({});
+
+  dragPreviewTemplateRef = input<TemplateRef<unknown> | null>(null);
 
   sort = viewChild(MatSort);
 

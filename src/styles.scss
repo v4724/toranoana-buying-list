@@ -10,4 +10,14 @@ body {
 body {
   margin: 0;
   @apply text-gray-800 font-sans;
+
+  // input 背景
+  --mdc-filled-text-field-container-color: theme('colors.gray.100');
+
+  // input 標籤
+  // --mdc-filled-text-field-focus-label-text-color: theme('colors.green.500');
+
+  --mdc-text-button-label-text-color: theme('colors.gray.600');
+  // 表格背景
+  --mat-table-background-color: theme('colors.gray.100');
 }
