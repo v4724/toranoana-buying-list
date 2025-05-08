@@ -9,7 +9,8 @@ body {
 }
 body {
   margin: 0;
-  @apply text-gray-800 font-sans;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  @apply text-gray-800;
 
   // input 背景
   --mdc-filled-text-field-container-color: theme('colors.gray.100');
@@ -20,4 +21,8 @@ body {
   --mdc-text-button-label-text-color: theme('colors.gray.600');
   // 表格背景
   --mat-table-background-color: theme('colors.gray.100');
+}
+
+input::placeholder {
+  color: theme('colors.gray.400') !important;
 }

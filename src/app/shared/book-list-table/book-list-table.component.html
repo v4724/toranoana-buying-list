@@ -60,10 +60,14 @@
     <ng-template #status let-element>
       @switch (element.status) {
         @case (BookStatus.IN_STOCK) {
-          <div class="rounded-sm bg-green-100 text-center">現貨</div>
+          <div class="rounded-md bg-green-100 text-center text-green-700">
+            現貨
+          </div>
         }
         @case (BookStatus.PRE_ORDER) {
-          <div class="rounded-sm bg-yellow-100 text-center">預約</div>
+          <div class="rounded-md bg-yellow-100 text-center text-yellow-700">
+            預約
+          </div>
         }
         @case (BookStatus.OUT_OF_STOCK) {
           <div class="rounded-sm text-center">-</div>
@@ -181,7 +185,8 @@
       @if (
         element.totalPrice !== '' &&
         element.totalPrice !== null &&
-        element.totalPrice !== undefined
+        element.totalPrice !== undefined &&
+        element.totalPrice !== '-'
       ) {
         <span> ¥{{ element.totalPrice | number: '1.0-0' }} </span>
       } @else {
@@ -193,7 +198,8 @@
       @if (
         element.totalEstWeight !== '' &&
         element.totalEstWeight !== null &&
-        element.totalEstWeight !== undefined
+        element.totalEstWeight !== undefined &&
+        element.totalEstWeight !== '-'
       ) {
         <span> {{ element.totalEstWeight | number }}g </span>
       } @else {
@@ -205,7 +211,8 @@
       @if (
         element.totalIntlShipFee !== '' &&
         element.totalIntlShipFee !== null &&
-        element.totalIntlShipFee !== undefined
+        element.totalIntlShipFee !== undefined &&
+        element.totalIntlShipFee !== '-'
       ) {
         <span>
           NT$

@@ -2,10 +2,11 @@
   <div class="w-full max-w-screen-2xl flex justify-between px-6 gap-4">
     <div class="flex w-6/12 justify-center items-center gap-2">
       <form class="w-full">
-        <mat-form-field class="w-full">
+        <mat-form-field class="w-full url-field">
           <mat-label>虎之穴本子網址</mat-label>
           <input
-            class=""
+            #urlEl
+            class="grow !h-8 placeholder-gray-200 placeholder-opacity-100"
             matInput
             [formControl]="url"
             placeholder="https://ecs.toranoana.jp/joshi/ec/item/xxxxxxx/"
@@ -13,6 +14,15 @@
             (keyup.enter)="addToList()"
             [disabled]="fetchLoading()"
           />
+          @if (urlEl.value) {
+            <button
+              mat-icon-button
+              class="text-base !p-1"
+              (click)="urlEl.value = ''"
+            >
+              <mat-icon class="">close</mat-icon>
+            </button>
+          }
         </mat-form-field>
       </form>
       <button

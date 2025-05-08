@@ -16,12 +16,6 @@ export class CalBoardService {
   exchangeRateValueChanges = toSignal(
     this.formGroup.get('exchangeRate')!.valueChanges.pipe(
       map((val) => {
-        if (Number.isNaN(val)) {
-          val = 0;
-        } else {
-          val = Number(val);
-        }
-        this.formGroup.get('exchangeRate')?.setValue(val, { emitEvent: false });
         return val;
       }),
     ),

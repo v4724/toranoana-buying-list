@@ -1,0 +1,11 @@
+:host ::ng-deep {
+  .url-field {
+    --mdc-icon-button-state-layer-size: 32px;
+  }
+  .url-field .mat-mdc-form-field-infix {
+    display: flex;
+  }
+  .url-field .mat-mdc-button-touch-target {
+    @apply size-6;
+  }
+}

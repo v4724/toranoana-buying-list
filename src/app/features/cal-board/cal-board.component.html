@@ -32,7 +32,7 @@
             placeholder="ex: 180"
             value=""
           />
-          <span matSuffix class="text-sm"> NT$/kg&nbsp;</span>
+          <span matSuffix class="text-sm">NT$/kg&nbsp;</span>
         </mat-form-field>
       </form>
     </div>
@@ -42,23 +42,47 @@
   <div class="min-w-60">
     <div class="flex justify-between">
       <div>總計：</div>
-      <div>{{ cnt() }} 本</div>
+      <div>{{ cnt() | number }} 本</div>
     </div>
     <div class="flex justify-between">
       <div>總價：</div>
-      <div>¥ {{ totalPriceJPY() | number: '1.0-0' }}</div>
+      <div>
+        @if (totalPriceJPY() !== '-') {
+          ¥ {{ totalPriceJPY() | number: '1.0-0' }}
+        } @else {
+          -
+        }
+      </div>
     </div>
     <div class="flex justify-between">
       <div>總價：</div>
-      <div>NT$ {{ totalPriceNT$() | number: '1.0-0' }}</div>
+      <div>
+        @if (totalPriceNT$() !== '-') {
+          NT$ {{ totalPriceNT$() | number: '1.0-0' }}
+        } @else {
+          -
+        }
+      </div>
     </div>
     <div class="flex justify-between">
       <div>預估總重：</div>
-      <div>{{ totalW() | number: '1.0-0' }} g</div>
+      <div>
+        @if (totalW() !== '-') {
+          {{ totalW() | number: '1.0-0' }} g
+        } @else {
+          -
+        }
+      </div>
     </div>
     <div class="flex justify-between">
       <div>預估總運費：</div>
-      <div>NT$ {{ totalFreight() }}</div>
+      <div>
+        @if (totalFreight() !== '-') {
+          NT$ {{ totalFreight() }}
+        } @else {
+          -
+        }
+      </div>
     </div>
   </div>
 </div>

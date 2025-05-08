@@ -53,9 +53,7 @@ export class CalBoardComponent implements OnInit {
     const buyingBookCntChange$ = this.booksService.buyingBookCntChange$();
     const toranoanaFreight =
       Number(this.calBoardService.toranoanaFreightValueChanges()) ?? 0;
-    const r = list?.reduce((sum, book) => {
-      return sum + book.totalPrice;
-    }, 0);
+
     return list
       ? list.reduce((sum, book) => {
           return sum + book.totalPrice;
