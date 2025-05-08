@@ -17,7 +17,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/toranoana-todo-list",
+            "outputPath": "dist/toranoana-buying-list",
+            "baseHref": "/toranoana-buying-list/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
