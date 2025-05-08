@@ -29,7 +29,7 @@
           class="grow"
           matInput
           [formControl]="url"
-          placeholder="https://ecs.toranoana.jp/joshi/ec/item/xxxxxxx/ https://.... "
+          placeholder="https://ecs.toranoana.jp/joshi/ec/item/xxxxxxx/ https://....(以空白或,分隔網址) "
           value=""
           (keyup.enter)="addToList()"
           [disabled]="isLoading()"
