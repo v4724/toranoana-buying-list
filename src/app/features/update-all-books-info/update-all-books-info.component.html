@@ -1,4 +1,4 @@
-<button mat-button (click)="update()" [disabled]="isLoading()">
+<button mat-button (click)="update()" [disabled]="isLoading() || true">
   <mat-icon>update</mat-icon>更新所有本子狀態
 </button>
 <button
@@ -6,6 +6,7 @@
   cdkOverlayOrigin
   #trigger="cdkOverlayOrigin"
   (click)="isOpen = !isOpen"
+  [disabled]="true"
 >
   <mat-icon>{{ !isOpen ? 'list' : 'close' }}</mat-icon>
   {{ !isOpen ? '檢視更新紀錄' : '關閉更新紀錄' }}

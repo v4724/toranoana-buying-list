@@ -90,7 +90,7 @@ export class BookListTableComponent {
     { name: 'count', title: '數量', columnType: 'template', hidden: false },
     {
       name: 'totalPrice',
-      title: '總價格(日圓)',
+      title: '總價格(JPY)',
       columnType: 'template',
       hidden: false,
       width: 80,

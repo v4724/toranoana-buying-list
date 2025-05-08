@@ -5,11 +5,17 @@ import { Book } from '../../shared/book-list-table/model/book.interface';
 import { BooksService } from '../../layout/main/service/books.service';
 import { catchError, EMPTY, finalize, tap } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-update-book-info',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './update-book-info.component.html',
   styleUrl: './update-book-info.component.scss',
 })

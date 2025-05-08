@@ -11,12 +11,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { catchError, EMPTY, finalize, tap } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BatchImportBooksComponent } from '../../features/batch-import-books/batch-import-books.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-main',
   standalone: true,
   imports: [
-    MatButtonModule,
+    BatchImportBooksComponent,
+    BookListTableComponent,
     CalBoardComponent,
     DragDropModule,
     FormsModule,
@@ -26,13 +29,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatIconModule,
     MatTooltipModule,
-    BookListTableComponent,
+    MatButtonModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss',
 })
 export class MainComponent implements OnInit {
-  url = new FormControl('https://ecs.toranoana.jp/joshi/ec/item/040031226821/');
+  url = new FormControl('');
 
   buyingList: Book[] = [];
 
@@ -60,6 +64,13 @@ export class MainComponent implements OnInit {
     const url = this.url.value;
     if (url) {
       this.fetchLoading.set(true);
+      const findInList = this.booksService.findInList(null, url);
+      if (findInList.find) {
+        window.alert(findInList.msg);
+        this.fetchLoading.set(false);
+
+        return;
+      }
       this.booksService
         .fetchProductInfo$(url)
         .pipe(

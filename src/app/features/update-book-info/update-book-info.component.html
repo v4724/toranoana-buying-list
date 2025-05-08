@@ -1,8 +1,14 @@
-<button
-  mat-icon-button
-  matTooltip="更新"
-  (click)="updateBook()"
-  [disabled]="book().isLoading"
->
-  <mat-icon class="">update</mat-icon>
-</button>
+@if (book().isLoading) {
+  <div class="flex items-center justify-center p-2.5">
+    <mat-spinner [diameter]="20"></mat-spinner>
+  </div>
+} @else {
+  <button
+    mat-icon-button
+    matTooltip="更新"
+    (click)="updateBook()"
+    [disabled]="book().isLoading"
+  >
+    <mat-icon class="">update</mat-icon>
+  </button>
+}

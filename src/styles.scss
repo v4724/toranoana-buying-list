@@ -21,8 +21,15 @@ body {
   --mdc-text-button-label-text-color: theme('colors.gray.600');
   // 表格背景
   --mat-table-background-color: theme('colors.gray.100');
+
+  // 主色系
+  --mat-sys-primary: theme('colors.gray.500') !important;
 }
 
 input::placeholder {
   color: theme('colors.gray.400') !important;
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  height: 0px;
 }

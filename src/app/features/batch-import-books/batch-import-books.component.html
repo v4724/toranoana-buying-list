@@ -1,0 +1,86 @@
+<button
+  mat-button
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  (click)="isOpen = !isOpen"
+>
+  <mat-icon>playlist_add</mat-icon>
+  @if (isOpen) {
+    關閉
+  } @else {
+    一次加入多本
+  }
+</button>
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen"
+  [cdkConnectedOverlayOffsetX]="-300"
+  (detach)="isOpen = false"
+  (backdropClick)="isOpen = false"
+>
+  <div class="panel p-4 flex flex-col gap-2">
+    <form class="w-full">
+      <mat-form-field class="w-full url-field">
+        <mat-label>虎之穴本子網址</mat-label>
+        <input
+          #urlEl
+          class="grow"
+          matInput
+          [formControl]="url"
+          placeholder="https://ecs.toranoana.jp/joshi/ec/item/xxxxxxx/ https://.... "
+          value=""
+          (keyup.enter)="addToList()"
+          [disabled]="isLoading()"
+        />
+        @if (urlEl.value) {
+          <button
+            mat-icon-button
+            matSuffix
+            class="text-base !p-1"
+            type="button"
+            (click)="url.setValue('')"
+          >
+            <mat-icon class="">close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </form>
+
+    <div class="flex flex-col gap-2 result-list">
+      @for (item of resultList; track $index) {
+        <div class="flex gap-x-2 gap-y-1 flex-wrap">
+          <div>{{ item.url }}</div>
+          @if (item.isLoading) {
+            <div class="flex items-center">
+              <mat-spinner [diameter]="16"></mat-spinner>
+            </div>
+          } @else {
+            @if (!item.fetchSuccess) {
+              <div>查詢失敗</div>
+              (
+              <div>{{ item.errText }}</div>
+              )
+            } @else if (item.addSuccess) {
+              <div>加入成功</div>
+              (
+              <div>書名：{{ item.book?.bookTitle }}</div>
+              )
+            } @else {
+              <div class="flex-shrink-0">加入失敗</div>
+              (
+              <div class="flex-shrink-0">書名：{{ item.book?.bookTitle }}</div>
+              )
+              <div
+                class="text-sm text-gray-500 flex items-center ml-auto flex-shrink-0"
+              >
+                備註：{{ item.errText }}
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+  </div>
+</ng-template>

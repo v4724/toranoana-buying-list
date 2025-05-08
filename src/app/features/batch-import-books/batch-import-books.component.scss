@@ -1,0 +1,27 @@
+.panel {
+  min-width: calc(30vw);
+  max-width: calc(80vw);
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  background: #fff;
+  text-align: center;
+  padding: 10px;
+  margin: 0;
+}
+.result-list {
+  width: 100%;
+  min-height: calc(10vh);
+  max-height: calc(60vh);
+  overflow: auto;
+}
+:host ::ng-deep {
+  .url-field {
+    --mdc-icon-button-state-layer-size: 32px;
+  }
+  .url-field .mat-mdc-form-field-infix {
+    display: flex;
+  }
+  .url-field .mat-mdc-button-touch-target {
+    @apply size-6;
+  }
+}

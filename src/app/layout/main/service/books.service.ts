@@ -2,17 +2,15 @@ import { inject, Injectable } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
-  EMPTY,
-  finalize,
   map,
   Observable,
   Subject,
+  tap,
 } from 'rxjs';
 import { Book } from '../../../shared/book-list-table/model/book.interface';
 import { BookStatus } from '../../../shared/book-list-table/model/book-status.enum';
 import { BookStock } from '../../../shared/book-list-table/model/book-stock.enum';
 import { BookSize } from '../../../shared/book-list-table/model/book-size.enum';
-import { cloneDeep } from 'lodash-es';
 import { HttpClient } from '@angular/common/http';
 import { BookEstWeightPipe } from '../../../core/pipe/book-est-weight.pipe';
 import { CalBoardService } from '../../../features/cal-board/service/cal-board.service';
@@ -22,8 +20,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class BooksService {
-  fetchUrlAPI = 'http://localhost:3000';
-  // https://html-parser-backend-qtq8.onrender.com
+  fetchUrlAPI = 'https://html-parser-backend-qtq8.onrender.com';
+  // http://localhost:3000
 
   buyingList = new BehaviorSubject<Book[]>([]);
 
@@ -40,86 +38,93 @@ export class BooksService {
   buyingBookCntChange$ = toSignal(this.buyingBookCntChange);
 
   constructor(private http: HttpClient) {
-    const bookList = [
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031235400/',
-      'https://ecs.toranoana.jp/joshi/ec/item/040031234759/',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031234725/',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031234481/',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031228798/',
-      'https://ecs.toranoana.jp/joshi/ec/item/040031227966/',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031233922/',
-      'https://ecs.toranoana.jp/joshi/ec/item/040031234649/',
-      'https://ecs.toranoana.jp/joshi/ec/item/040031237699',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031226479/',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031237640',
-      'https://ecs.toranoana.jp/joshi/ec/item/040031226821/',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031154427/',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031226319',
-      'https://ec.toranoana.jp/joshi_r/ec/item/040031235423/',
-    ];
-    bookList.forEach((url) => {
-      this.fetchProductInfo$(url).subscribe((book) => {
-        this.addToBuyingList(book);
-      });
-    });
-    let books = 3;
-    while (books-- > 0) {
-      this.addToBuyingList({
-        id: `id-${books}`,
-        previewImg: '',
-        url: '',
-        bookTitle: `title-${books}`,
-        price: 0,
-        status: (books % 3).toString() as BookStatus,
-        stock: (books % 3).toString() as BookStock,
-        bookSize: books % 2 === 0 ? BookSize.A5 : BookSize.B5,
-        bookPages: 0,
-        estWeight: 0,
-        intlShipFee: 0,
-        count: 1,
-        totalPrice: 0,
-        totalEstWeight: 0,
-        totalIntlShipFee: 0,
-        shippingSchedule: [
-          {
-            type: '每度便',
-            shippingDate: '2025/05/07',
-          },
-          {
-            type: '定期便（週1)',
-            shippingDate: '2025/05/07',
-          },
-          {
-            type: '定期便（月2)',
-            shippingDate: '2025/05/20',
-          },
-        ],
-      });
-    }
-    // const bookList2 = cloneDeep(bookList);
-    // this.buyingList.next(bookList);
-    // this.wishList.next(bookList2);
+    // const bookList = [
+    // ];
+    // let books = 3;
+    // while (books-- > 0) {
+    //   this.addToBuyingList({
+    //     id: `id-${books}`,
+    //     previewImg: '',
+    //     url: '',
+    //     bookTitle: `title-${books}`,
+    //     price: 0,
+    //     status: (books % 3).toString() as BookStatus,
+    //     stock: (books % 3).toString() as BookStock,
+    //     bookSize: books % 2 === 0 ? BookSize.A5 : BookSize.B5,
+    //     bookPages: 0,
+    //     estWeight: 0,
+    //     intlShipFee: 0,
+    //     count: 1,
+    //     totalPrice: 0,
+    //     totalEstWeight: 0,
+    //     totalIntlShipFee: 0,
+    //     shippingSchedule: [
+    //       {
+    //         type: '每度便',
+    //         shippingDate: '2025/05/07',
+    //       },
+    //       {
+    //         type: '定期便（週1)',
+    //         shippingDate: '2025/05/07',
+    //       },
+    //       {
+    //         type: '定期便（月2)',
+    //         shippingDate: '2025/05/20',
+    //       },
+    //     ],
+    //   });
+    // }
   }
 
   addToBuyingList(book: Book) {
-    console.debug('fetch:', book);
-    const wishList = this.wishList.value;
     const buyingList = this.buyingList.value;
-
-    const findInBuyingList = buyingList.find((item) => item.id === book.id);
-    const findInWishList = wishList.find((item) => item.id === book.id);
-    if (findInBuyingList || findInWishList) {
-      const text = findInBuyingList ? '購買清單' : '願望清單';
-      window.alert(
-        `「${book.bookTitle}」重複加入「${text}」，若需要多本請調整該本數量。`,
-      );
-      return;
-    }
 
     buyingList.push(book);
 
     const newList = [...buyingList];
     this.buyingList.next(newList);
+  }
+
+  addArrToBuyingList(books: Book[]) {
+    const buyingList = this.buyingList.value;
+
+    books.forEach((book) => {
+      buyingList.push(book);
+    });
+
+    const newList = [...buyingList];
+    this.buyingList.next(newList);
+  }
+
+  findInList(book: Book | null, url?: string) {
+    const wishList = this.wishList.value;
+    const buyingList = this.buyingList.value;
+
+    const findInBuyingList = buyingList.find((item) =>
+      book ? item.url === book.url || item.id === book.id : url === item.url,
+    );
+    const findInWishList = wishList.find((item) =>
+      book ? item.url === book.url || item.id === book.id : url === item.url,
+    );
+
+    if (findInBuyingList || findInWishList) {
+      const listName = findInBuyingList ? '購買清單' : '願望清單';
+      const bookTitle = findInBuyingList
+        ? findInBuyingList.bookTitle
+        : findInWishList?.bookTitle;
+      const msg = `「${bookTitle}」重複加入「${listName}」，若需要多本請調整該本數量。`;
+      return {
+        find: true,
+        listName,
+        msg,
+        book: findInBuyingList || findInWishList,
+      };
+    }
+
+    return {
+      find: false,
+      msg: '',
+    };
   }
 
   removeBook(book: Book) {
@@ -147,6 +152,9 @@ export class BooksService {
     const fetchUrl = `${this.fetchUrlAPI}/scrape?url=${url}`;
     return this.http.get(fetchUrl, { responseType: 'text' }).pipe(
       map((html: string) => this.parseHtml(html)),
+      tap((book) => {
+        console.debug('fetch:', book);
+      }),
       catchError((err) => {
         console.error('取得本子資訊失敗', err);
         if (alert) {
